@@ -25,7 +25,11 @@ function operate(calcOperator, operandOne, operandTwo) {
         case '×':
             return multiply(operandOne, operandTwo);
         case '÷':
-            return divide(operandOne, operandTwo);
+            if (parseInt(operandTwo) === 0) {
+                return NaN;
+            } else {
+                return divide(operandOne, operandTwo);
+            };
         default:
             return null;
     };
@@ -58,10 +62,15 @@ function updateDisplay(newVal) {
             break;
         case '=':
             result = operate(calcOperator, operandOne, operandStack.join(''));
-            operandOne = result;
+            if (isNaN(result)) {
+                calcDisplay.textContent = 'NO ZERO DIVISION';
+                operandOne = null;
+            } else {
+                operandOne = result;
+                calcDisplay.textContent = result;
+            }
             operandStack = [];
             calcOperator = null;
-            calcDisplay.textContent = result;
             break;
         default:
             operandStack.push(newVal)
