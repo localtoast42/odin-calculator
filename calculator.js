@@ -30,11 +30,33 @@ function operate(calcOperator, operandOne, operandTwo) {
 };
 
 function updateDisplay(newVal) {
-    if (newVal === 'C') {
-        operandOneDisplay.textContent = ''
-        operatorDisplay.textContent = ''
-        operandTwoDisplay.textContent = ''
-    }
+    switch(newVal) {
+        case 'C':
+            operandOneDisplay.textContent = null;
+            operatorDisplay.textContent = null;
+            operandTwoDisplay.textContent = null;
+            break;
+        case '+':
+        case '-':
+        case '×':
+        case '÷':
+            operatorDisplay.textContent = newVal;
+            break;
+        case newVal === '=':
+            operate(
+                operatorDisplay.textContent, 
+                operandOneDisplay.textContent, 
+                operandTwoDisplay.textContent);
+            break;
+        default:
+            if (operandOneDisplay.textContent && operandTwoDisplay.textContent) {
+                return;
+            } else if (operandOneDisplay.textContent) {
+                operandTwoDisplay.textContent = newVal;
+            } else {
+                operandOneDisplay.textContent = newVal;
+            };
+    };
 };
 
 let operandOne = null;
