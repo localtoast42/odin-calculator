@@ -1,5 +1,5 @@
 function add(a, b) {
-    return a + b;
+    return parseInt(a) + parseInt(b);
 };
 
 function subtract(a, b) {
@@ -15,6 +15,8 @@ function divide(a, b) {
 };
 
 function operate(calcOperator, operandOne, operandTwo) {
+    operandOne = parseInt(operandOne);
+    operandTwo = parseInt(operandTwo);
     switch(calcOperator) {
         case '+':
             return add(operandOne, operandTwo);
@@ -32,40 +34,47 @@ function operate(calcOperator, operandOne, operandTwo) {
 function updateDisplay(newVal) {
     switch(newVal) {
         case 'C':
-            operandOneDisplay.textContent = null;
-            operatorDisplay.textContent = null;
-            operandTwoDisplay.textContent = null;
+            operandStack = [];
+            operandOne = null;
+            calcOperator = null;
+            result = null;
+            calcDisplay.textContent = '';
             break;
         case '+':
         case '-':
         case '×':
         case '÷':
-            operatorDisplay.textContent = newVal;
+            if (operandOne && operandStack) {
+                result = operate(calcOperator, operandOne, operandStack.join(''));
+                operandOne = result;
+                operandStack = [];
+                calcDisplay.textContent = result;
+                calcOperator = newVal;
+            } else {
+                operandOne = operandStack.join('');
+                operandStack = [];
+                calcOperator = newVal;
+            };
             break;
-        case newVal === '=':
-            operate(
-                operatorDisplay.textContent, 
-                operandOneDisplay.textContent, 
-                operandTwoDisplay.textContent);
+        case '=':
+            result = operate(calcOperator, operandOne, operandStack.join(''));
+            operandOne = result;
+            operandStack = [];
+            calcOperator = null;
+            calcDisplay.textContent = result;
             break;
         default:
-            if (operandOneDisplay.textContent && operandTwoDisplay.textContent) {
-                return;
-            } else if (operandOneDisplay.textContent) {
-                operandTwoDisplay.textContent = newVal;
-            } else {
-                operandOneDisplay.textContent = newVal;
-            };
+            operandStack.push(newVal)
+            calcDisplay.textContent = operandStack.join('');
     };
 };
 
+let operandStack = [];
 let operandOne = null;
-let operandTwo = null;
 let calcOperator = null;
+let result = null;
 
-const operandOneDisplay = document.querySelector('#operand-one');
-const operandTwoDisplay = document.querySelector('#operand-two');
-const operatorDisplay = document.querySelector('#operator');
+const calcDisplay = document.querySelector('.display-item');
 const buttons = document.querySelectorAll('.numpad-button');
 
 buttons.forEach((button) => {
