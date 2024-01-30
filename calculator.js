@@ -29,6 +29,25 @@ function operate(calcOperator, operandOne, operandTwo) {
     };
 };
 
+function updateDisplay(newVal) {
+    if (newVal === 'C') {
+        operandOneDisplay.textContent = ''
+        operatorDisplay.textContent = ''
+        operandTwoDisplay.textContent = ''
+    }
+};
+
 let operandOne = null;
 let operandTwo = null;
 let calcOperator = null;
+
+const operandOneDisplay = document.querySelector('#operand-one');
+const operandTwoDisplay = document.querySelector('#operand-two');
+const operatorDisplay = document.querySelector('#operator');
+const buttons = document.querySelectorAll('.numpad-button');
+
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        updateDisplay(button.textContent);
+    });
+});
