@@ -38,3 +38,13 @@ body {
     border-width: 2px;
     border-color: darkgray;
 }
+
+.operator {
+    background-color: black;
+    color: white;
+}
+
+.clear {
+    background-color: lightcoral;
+    color: white;
+}
