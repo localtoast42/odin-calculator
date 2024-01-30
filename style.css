@@ -1,0 +1,40 @@
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.calculator {
+    background-color: grey;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.display {
+    background-color: lightgray;
+    margin: 20px;
+    width: 200px;
+    height: 50px;
+}
+
+.numpad {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.numpad-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.numpad-button {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 5px;
+    border-width: 2px;
+    border-color: darkgray;
+}
