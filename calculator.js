@@ -18,6 +18,8 @@ function operate(operandOne, calcOperator, operandTwo) {
     operandOne = parseInt(operandOne);
     operandTwo = parseInt(operandTwo);
     let result = null;
+    let resultString = '';
+
     switch(calcOperator) {
         case '+':
             result = add(operandOne, operandTwo);
@@ -30,7 +32,7 @@ function operate(operandOne, calcOperator, operandTwo) {
             break;
         case '÷':
             if (parseInt(operandTwo) === 0) {
-                result = NaN;
+                result = 'NO ZERO DIVISION';
             } else {
                 result = divide(operandOne, operandTwo);
             };
@@ -38,9 +40,16 @@ function operate(operandOne, calcOperator, operandTwo) {
         default:
             result = null;
     };
+
     if (!Number.isInteger(result) && !isNaN(result)) {
         result = parseFloat(result.toFixed(3));
     };
+
+    resultString = result.toString();
+    if (resultString.length > 21) {
+        result = 'OVERFLOW'
+    };
+
     return result;
 };
 
@@ -65,8 +74,12 @@ function updateDisplay(newVal) {
                 result = operate(...operandStack);
                 calcDisplay.textContent = result;
                 operandStack = [];
-                operandStack.push(result);
-                operandStack.push(newVal);
+                if (typeof result === String) {
+                    inputStack = [];
+                } else {
+                    operandStack.push(result);
+                    operandStack.push(newVal);
+                };
             } else if (operandStack.length === 2) {
                 // replace operator if last input was operator
                 operandStack.pop();
@@ -87,12 +100,12 @@ function updateDisplay(newVal) {
             if (operandStack.length === 3) {
                 result = operate(...operandStack);
                 operandStack = [];
-                if (isNaN(result)) {
-                    calcDisplay.textContent = 'NO ZERO DIVISION';
+                calcDisplay.textContent = result;
+                if (typeof result === String) {
                     operandStack = [];
+                    inputStack = [];
                 } else {
                     operandStack.push(result);
-                    calcDisplay.textContent = result;
                 };
             };
             result = null;
