@@ -14,7 +14,7 @@ function divide(a, b) {
     return a / b;
 };
 
-function operate(calcOperator, operandOne, operandTwo) {
+function operate(operandOne, calcOperator, operandTwo) {
     operandOne = parseInt(operandOne);
     operandTwo = parseInt(operandTwo);
     switch(calcOperator) {
@@ -39,8 +39,6 @@ function updateDisplay(newVal) {
     switch(newVal) {
         case 'C':
             operandStack = [];
-            operandOne = null;
-            calcOperator = null;
             result = null;
             calcDisplay.textContent = '';
             break;
@@ -48,38 +46,55 @@ function updateDisplay(newVal) {
         case '-':
         case '×':
         case '÷':
-            if (operandOne && operandStack) {
-                result = operate(calcOperator, operandOne, operandStack.join(''));
-                operandOne = result;
-                operandStack = [];
-                calcDisplay.textContent = result;
-                calcOperator = newVal;
-            } else {
-                operandOne = operandStack.join('');
-                operandStack = [];
-                calcOperator = newVal;
+            if (inputStack.length > 0) {
+                operandStack.push(inputStack.join(''));
+                inputStack = [];
             };
+            if (operandStack.length === 3) {
+                // if operandStack is full, evaluate result, dump stack, then add result and new operator
+                result = operate(...operandStack);
+                calcDisplay.textContent = result;
+                operandStack = [];
+                operandStack.push(result);
+                operandStack.push(newVal);
+            } else if (operandStack.length === 2) {
+                // replace operator if last input was operator
+                operandStack.pop();
+                operandStack.push(newVal);
+            } else if (operandStack.length === 1) {
+                operandStack.push(newVal);
+            };
+            result = null;
             break;
         case '=':
-            result = operate(calcOperator, operandOne, operandStack.join(''));
-            if (isNaN(result)) {
-                calcDisplay.textContent = 'NO ZERO DIVISION';
-                operandOne = null;
-            } else {
-                operandOne = result;
-                calcDisplay.textContent = result;
-            }
-            operandStack = [];
-            calcOperator = null;
+            if (inputStack.length > 0) {
+                if (operandStack.length === 1) {
+                    operandStack.pop();
+                };
+                operandStack.push(inputStack.join(''));
+                inputStack = [];
+            };
+            if (operandStack.length === 3) {
+                result = operate(...operandStack);
+                operandStack = [];
+                if (isNaN(result)) {
+                    calcDisplay.textContent = 'NO ZERO DIVISION';
+                    operandStack = [];
+                } else {
+                    operandStack.push(result);
+                    calcDisplay.textContent = result;
+                };
+            };
+            result = null;
             break;
         default:
-            operandStack.push(newVal)
-            calcDisplay.textContent = operandStack.join('');
+            inputStack.push(newVal);
+            calcDisplay.textContent = inputStack.join('');
     };
 };
 
+let inputStack = [];
 let operandStack = [];
-let operandOne = null;
 let calcOperator = null;
 let result = null;
 
