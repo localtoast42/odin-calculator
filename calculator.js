@@ -17,22 +17,31 @@ function divide(a, b) {
 function operate(operandOne, calcOperator, operandTwo) {
     operandOne = parseInt(operandOne);
     operandTwo = parseInt(operandTwo);
+    let result = null;
     switch(calcOperator) {
         case '+':
-            return add(operandOne, operandTwo);
+            result = add(operandOne, operandTwo);
+            break;
         case '-':
-            return subtract(operandOne, operandTwo);
+            result = subtract(operandOne, operandTwo);
+            break;
         case '×':
-            return multiply(operandOne, operandTwo);
+            result = multiply(operandOne, operandTwo);
+            break;
         case '÷':
             if (parseInt(operandTwo) === 0) {
-                return NaN;
+                result = NaN;
             } else {
-                return divide(operandOne, operandTwo);
+                result = divide(operandOne, operandTwo);
             };
+            break;
         default:
-            return null;
+            result = null;
     };
+    if (!Number.isInteger(result) && !isNaN(result)) {
+        result = parseFloat(result.toFixed(3));
+    };
+    return result;
 };
 
 function updateDisplay(newVal) {
