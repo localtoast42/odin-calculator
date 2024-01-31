@@ -48,6 +48,7 @@ function updateDisplay(newVal) {
     switch(newVal) {
         case 'C':
             operandStack = [];
+            inputStack = [];
             result = null;
             calcDisplay.textContent = '';
             break;
